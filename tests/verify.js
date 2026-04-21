@@ -1,6 +1,11 @@
-const fs = require("fs");
-const path = require("path");
-const { spawn } = require("child_process");
+import fs from "fs";
+import path from "path";
+import { spawn } from "child_process";
+import { createRequire } from "module";
+import { fileURLToPath } from "url";
+
+const require = createRequire(import.meta.url);
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 function loadPlaywright() {
   try {
@@ -11,7 +16,6 @@ function loadPlaywright() {
 }
 
 const { chromium } = loadPlaywright();
-
 const shouldStartServer = process.argv.includes("--server");
 const baseUrl = process.env.APP_URL || (shouldStartServer ? "http://localhost:4174" : "http://localhost:4173");
 const browserCandidates = [

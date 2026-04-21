@@ -16,7 +16,7 @@ Open `http://localhost:4173`.
 npm.cmd test
 ```
 
-The test script starts a temporary server on `http://localhost:4174`, checks server route behavior, validates the app flow with Chrome, and writes screenshots to `artifacts/`.
+The test script runs syntax linting, format checks, unit tests, then starts a temporary server on `http://localhost:4174`, checks server route behavior, validates the app flow with Chrome, and writes screenshots to `artifacts/`.
 
 ## Included Scope
 
@@ -37,8 +37,12 @@ The implementation is intentionally dependency-free so it can run consistently i
 - `server.js` - static server and mock API
 - `data/mock-data.json` - dummy operations data
 - `public/app.js` - app entry and shell orchestration
+- `public/css/` - modular CSS layers for tokens, base, layout, components, pages, and responsive rules
 - `public/js/store.js` - local state and data loading
 - `public/js/routes.js` - route and role visibility configuration
+- `public/js/shell.js` - app shell rendering and global event binding
 - `public/js/components.js` - reusable UI fragments
 - `public/js/charts.js` - canvas chart rendering
 - `public/js/pages/` - page-level renderers
+- `tests/unit.js` - helper-level unit tests
+- `tests/lint.js` and `tests/format-check.js` - local quality checks
