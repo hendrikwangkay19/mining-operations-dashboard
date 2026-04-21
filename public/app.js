@@ -1,6 +1,7 @@
 import { routes, normalizeRoute } from "./js/routes.js";
 import { store, setUser, loadMockData } from "./js/store.js";
-import { bindRouteSync, mountShell } from "./js/shell.js";
+import { bindRouteSync } from "./js/nav.js";
+import { mountShell } from "./js/shell.js";
 
 const app = document.querySelector("#app");
 
@@ -76,7 +77,7 @@ function renderError() {
   document.querySelector("#retryBtn").addEventListener("click", fetchData);
 }
 
-bindRouteSync();
+bindRouteSync(() => mountShell(app, renderLogin));
 
 if (store.user) {
   fetchData();

@@ -41,8 +41,12 @@ The implementation is intentionally dependency-free so it can run consistently i
 - `public/js/store.js` - local state and data loading
 - `public/js/routes.js` - route and role visibility configuration
 - `public/js/shell.js` - app shell rendering and global event binding
+- `public/js/nav.js` - navigation rendering and route synchronization
+- `public/js/notifications.js` - notification dropdown rendering and events
+- `public/js/fleet-interactions.js` - fleet filters and unit detail modal events
 - `public/js/components.js` - reusable UI fragments
 - `public/js/charts.js` - canvas chart rendering
 - `public/js/pages/` - page-level renderers
+- `tests/helpers.test.js` - focused tests for route and status helpers
 - `tests/unit.js` - helper-level unit tests
 - `tests/lint.js` and `tests/format-check.js` - local quality checks

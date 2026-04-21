@@ -1,8 +1,11 @@
-import { routes, getVisibleRoutes, normalizeRoute } from "./routes.js";
+import { getVisibleRoutes } from "./routes.js";
+import { bindNavEvents, renderNav } from "./nav.js";
+import { bindNotificationToggle, renderNotifications } from "./notifications.js";
+import { bindFleetInteractions } from "./fleet-interactions.js";
 import { store, clearUser } from "./store.js";
 import { drawProductionChart } from "./charts.js";
 import { renderDashboard } from "./pages/dashboard.js";
-import { renderFleet, unitModal } from "./pages/fleet.js";
+import { renderFleet } from "./pages/fleet.js";
 import { renderProduction } from "./pages/production.js";
 import { renderSafety } from "./pages/safety.js";
 import { renderMaintenance } from "./pages/maintenance.js";
@@ -24,30 +27,8 @@ export function mountShell(app, onLogoutRender) {
   renderShell();
 }
 
-export function bindRouteSync() {
-  window.addEventListener("hashchange", () => {
-    if (!store.user) return;
-    const route = location.hash.replace("#/", "");
-    const nextRoute = normalizeRoute(route, store.user.role);
-
-    if (routes[nextRoute] && store.route !== nextRoute) {
-      store.route = nextRoute;
-      store.notificationsOpen = false;
-      renderShell();
-    }
-  });
-}
-
 function renderShell() {
   const visibleRoutes = getVisibleRoutes(store.user.role);
-  const nav = Object.entries(visibleRoutes)
-    .map(([key, route]) => `
-      <a href="#/${key}" class="${store.route === key ? "active" : ""}" data-route="${key}">
-        <span>${route.icon}</span>
-        <span>${route.label}</span>
-      </a>
-    `)
-    .join("");
 
   rootElement.innerHTML = `
     <div class="app-shell">
@@ -59,7 +40,7 @@ function renderShell() {
             <small>Operations Center</small>
           </div>
         </div>
-        <nav class="nav">${nav}</nav>
+        <nav class="nav">${renderNav(visibleRoutes)}</nav>
       </aside>
       <header class="topbar">
         <input class="input search" id="globalSearch" placeholder="Search units, sites, incidents..." value="${store.search}">
@@ -84,41 +65,13 @@ function renderShell() {
   renderPage();
 }
 
-function renderNotifications() {
-  const notifications = store.data?.notifications || [];
-  return `
-    <div class="notification-menu ${store.notificationsOpen ? "open" : ""}">
-      <div class="notification-head">
-        <strong>Notifications</strong>
-        <span>${notifications.length} new</span>
-      </div>
-      ${notifications.length ? notifications.map((item) => `
-        <button class="notification-item" type="button">${item}</button>
-      `).join("") : `<div class="empty-state">Tidak ada notifikasi baru.</div>`}
-    </div>
-  `;
-}
-
 function bindShellEvents(visibleRoutes) {
-  document.querySelectorAll(".nav a").forEach((link) => {
-    link.addEventListener("click", (event) => {
-      event.preventDefault();
-      if (!visibleRoutes[link.dataset.route]) return;
-      store.route = link.dataset.route;
-      store.notificationsOpen = false;
-      history.pushState(null, "", `#/${store.route}`);
-      renderShell();
-    });
-  });
+  bindNavEvents(visibleRoutes, renderShell);
+  bindNotificationToggle(renderShell);
 
   document.querySelector("#logoutBtn").addEventListener("click", () => {
     clearUser();
     loginRenderer();
-  });
-
-  document.querySelector("#notificationBtn").addEventListener("click", () => {
-    store.notificationsOpen = !store.notificationsOpen;
-    renderShell();
   });
 
   document.querySelector("#globalSearch").addEventListener("input", (event) => {
@@ -139,39 +92,5 @@ function afterRender() {
     drawProductionChart(chart, store.data.productionTrend);
   }
 
-  const statusFilter = document.querySelector("#fleetStatus");
-  const siteFilter = document.querySelector("#fleetSite");
-  if (statusFilter) {
-    statusFilter.addEventListener("change", (event) => {
-      store.fleetStatus = event.target.value;
-      renderPage();
-    });
-  }
-  if (siteFilter) {
-    siteFilter.addEventListener("change", (event) => {
-      store.fleetSite = event.target.value;
-      renderPage();
-    });
-  }
-
-  document.querySelectorAll("[data-unit-id]").forEach((button) => {
-    button.addEventListener("click", () => openUnitModal(button.dataset.unitId));
-  });
-}
-
-function openUnitModal(unitId) {
-  const unit = store.data.fleet.find((item) => item.id === unitId);
-  const modal = document.querySelector("#unitModal");
-  modal.innerHTML = unitModal(unit);
-  modal.classList.add("open");
-  document.querySelector("#closeModal").addEventListener("click", closeUnitModal);
-  modal.addEventListener("click", (event) => {
-    if (event.target === modal) closeUnitModal();
-  }, { once: true });
-}
-
-function closeUnitModal() {
-  const modal = document.querySelector("#unitModal");
-  modal.classList.remove("open");
-  modal.innerHTML = "";
+  bindFleetInteractions(renderPage);
 }
