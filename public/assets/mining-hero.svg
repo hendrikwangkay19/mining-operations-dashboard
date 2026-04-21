@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-label="Open pit mining operation at dusk">
+  <defs>
+    <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#6f8f9e"/>
+      <stop offset="0.48" stop-color="#d0a05a"/>
+      <stop offset="1" stop-color="#394739"/>
+    </linearGradient>
+    <linearGradient id="pit" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#6b624f"/>
+      <stop offset="1" stop-color="#2e3a31"/>
+    </linearGradient>
+    <filter id="soft">
+      <feGaussianBlur stdDeviation="5"/>
+    </filter>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#sky)"/>
+  <circle cx="1280" cy="190" r="92" fill="#f1cf70" opacity="0.78" filter="url(#soft)"/>
+  <path d="M0 398 C230 330 333 372 530 318 C716 268 863 270 1055 324 C1260 381 1394 345 1600 294 L1600 1000 L0 1000 Z" fill="#34453c" opacity="0.92"/>
+  <path d="M0 512 C224 460 413 493 612 440 C808 386 1005 412 1184 472 C1330 521 1454 504 1600 456 L1600 1000 L0 1000 Z" fill="#27362f"/>
+  <path d="M0 612 L340 558 L612 610 L890 540 L1226 622 L1600 570 L1600 1000 L0 1000 Z" fill="url(#pit)"/>
+  <path d="M0 696 L270 656 L555 704 L852 646 L1135 726 L1600 670 L1600 770 L1170 820 L856 744 L558 806 L256 760 L0 812 Z" fill="#a8743d" opacity="0.72"/>
+  <path d="M0 805 L338 756 L627 815 L908 744 L1240 830 L1600 784 L1600 1000 L0 1000 Z" fill="#1c2c26"/>
+  <g transform="translate(985 620)">
+    <rect x="0" y="64" width="244" height="52" rx="6" fill="#d69c2f"/>
+    <rect x="28" y="28" width="76" height="50" rx="5" fill="#c78424"/>
+    <rect x="112" y="12" width="102" height="24" rx="4" fill="#e6b94d"/>
+    <path d="M204 20 L304 -26 L318 -10 L224 52 Z" fill="#d69c2f"/>
+    <path d="M314 -26 L370 -10 L362 8 L318 -8 Z" fill="#c78424"/>
+    <circle cx="58" cy="122" r="31" fill="#141d19"/>
+    <circle cx="58" cy="122" r="16" fill="#59655a"/>
+    <circle cx="190" cy="122" r="31" fill="#141d19"/>
+    <circle cx="190" cy="122" r="16" fill="#59655a"/>
+  </g>
+  <g transform="translate(470 704)">
+    <rect x="0" y="36" width="176" height="58" rx="6" fill="#d6a13a"/>
+    <path d="M22 36 L58 0 L96 0 L118 36 Z" fill="#e2b755"/>
+    <path d="M144 42 L230 18 L242 34 L174 74 Z" fill="#c8892a"/>
+    <circle cx="42" cy="102" r="25" fill="#111914"/>
+    <circle cx="42" cy="102" r="12" fill="#687165"/>
+    <circle cx="132" cy="102" r="25" fill="#111914"/>
+    <circle cx="132" cy="102" r="12" fill="#687165"/>
+  </g>
+  <path d="M92 872 C260 822 408 842 550 812 C766 766 936 796 1120 840 C1294 881 1448 860 1600 826" fill="none" stroke="#d7b36a" stroke-width="9" opacity="0.38"/>
+  <path d="M0 915 C198 870 425 902 648 858 C837 821 1010 850 1206 896 C1354 930 1478 916 1600 884" fill="none" stroke="#d7b36a" stroke-width="6" opacity="0.22"/>
+</svg>

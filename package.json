@@ -1,0 +1,12 @@
+{
+  "name": "mining-operations-dashboard",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Internal mining operations monitoring dashboard based on PRD_Mining_Dashboard.pdf",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "verify": "node tests/verify.js --server",
+    "test": "node --check server.js && node --check public/app.js && node tests/verify.js --server"
+  }
+}

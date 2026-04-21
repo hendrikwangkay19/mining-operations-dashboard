@@ -1,0 +1,69 @@
+{
+  "summary": [
+    { "label": "Daily Production", "value": "48,750 t", "delta": "+8.4%", "tone": "positive" },
+    { "label": "Fleet Availability", "value": "91.2%", "delta": "+2.1%", "tone": "positive" },
+    { "label": "Hauling Cycles", "value": "1,284", "delta": "-3.2%", "tone": "warning" },
+    { "label": "Fuel Burn", "value": "38.4 kL", "delta": "-5.6%", "tone": "positive" },
+    { "label": "Safety Incidents", "value": "2", "delta": "0 severe", "tone": "danger" },
+    { "label": "Maintenance Due", "value": "11", "delta": "4 urgent", "tone": "warning" }
+  ],
+  "productionTrend": [
+    { "day": "Mon", "overburden": 41500, "coal": 12600 },
+    { "day": "Tue", "overburden": 43800, "coal": 13200 },
+    { "day": "Wed", "overburden": 46200, "coal": 14100 },
+    { "day": "Thu", "overburden": 44700, "coal": 13900 },
+    { "day": "Fri", "overburden": 48750, "coal": 15150 },
+    { "day": "Sat", "overburden": 47100, "coal": 14680 },
+    { "day": "Sun", "overburden": 49200, "coal": 15420 }
+  ],
+  "utilization": [
+    { "name": "Excavator", "value": 87 },
+    { "name": "Dump Truck", "value": 78 },
+    { "name": "Dozer", "value": 72 },
+    { "name": "Grader", "value": 64 },
+    { "name": "Drill", "value": 69 }
+  ],
+  "operations": [
+    { "shift": "A", "site": "Pit North", "activity": "Overburden removal", "target": "42,000 bcm", "actual": "43,800 bcm", "status": "On Track" },
+    { "shift": "A", "site": "ROM 2", "activity": "Coal hauling", "target": "13,000 t", "actual": "12,450 t", "status": "Watch" },
+    { "shift": "B", "site": "Pit East", "activity": "Road maintenance", "target": "6.5 km", "actual": "5.8 km", "status": "Delayed" },
+    { "shift": "B", "site": "Crusher", "activity": "Feed rate", "target": "1,850 tph", "actual": "1,910 tph", "status": "On Track" }
+  ],
+  "alerts": [
+    { "level": "High", "title": "DT-203 tire temperature above threshold", "time": "08:42", "area": "Pit North" },
+    { "level": "Medium", "title": "EX-017 idle time exceeded plan", "time": "09:15", "area": "Pit East" },
+    { "level": "Low", "title": "Rain expected near haul road 4", "time": "10:05", "area": "Hauling" }
+  ],
+  "fleet": [
+    { "id": "EX-017", "type": "Excavator", "site": "Pit East", "operator": "Raka", "status": "Active", "fuel": 64, "hours": 12842, "load": "Coal seam 4", "lastService": "2026-04-09", "gps": "-2.413, 115.302" },
+    { "id": "DT-203", "type": "Dump Truck", "site": "Pit North", "operator": "Nadia", "status": "Warning", "fuel": 42, "hours": 9140, "load": "Overburden", "lastService": "2026-04-12", "gps": "-2.408, 115.287" },
+    { "id": "DT-188", "type": "Dump Truck", "site": "ROM 2", "operator": "Bima", "status": "Active", "fuel": 73, "hours": 8723, "load": "Coal", "lastService": "2026-04-15", "gps": "-2.421, 115.319" },
+    { "id": "DZ-045", "type": "Dozer", "site": "Pit East", "operator": "Siti", "status": "Standby", "fuel": 58, "hours": 11328, "load": "Road trim", "lastService": "2026-04-01", "gps": "-2.399, 115.276" },
+    { "id": "GR-022", "type": "Grader", "site": "Haul Road", "operator": "Arman", "status": "Maintenance", "fuel": 21, "hours": 10552, "load": "Scheduled service", "lastService": "2026-04-21", "gps": "-2.435, 115.331" },
+    { "id": "DR-006", "type": "Drill", "site": "Pit North", "operator": "Dewi", "status": "Active", "fuel": 81, "hours": 7410, "load": "Blast pattern N12", "lastService": "2026-04-10", "gps": "-2.388, 115.265" }
+  ],
+  "production": [
+    { "site": "Pit North", "material": "Overburden", "target": 42000, "actual": 43800, "quality": "N/A", "recovery": 104 },
+    { "site": "Pit East", "material": "Coal", "target": 13500, "actual": 12980, "quality": "5,720 kcal", "recovery": 96 },
+    { "site": "ROM 2", "material": "Coal crushed", "target": 11800, "actual": 12060, "quality": "5,680 kcal", "recovery": 102 },
+    { "site": "Waste Dump", "material": "Overburden", "target": 39000, "actual": 37150, "quality": "N/A", "recovery": 95 }
+  ],
+  "safety": [
+    { "area": "Pit North", "metric": "PPE Compliance", "value": "98%", "status": "Good" },
+    { "area": "Pit East", "metric": "Near Miss", "value": "2", "status": "Watch" },
+    { "area": "Haul Road", "metric": "Overspeed Events", "value": "7", "status": "Action" },
+    { "area": "Workshop", "metric": "Permit Closure", "value": "94%", "status": "Good" }
+  ],
+  "maintenance": [
+    { "unit": "GR-022", "type": "250h Service", "due": "2026-04-21", "priority": "Urgent", "owner": "Workshop A" },
+    { "unit": "DT-203", "type": "Tire Inspection", "due": "2026-04-21", "priority": "Urgent", "owner": "Field Service" },
+    { "unit": "EX-017", "type": "Hydraulic Sampling", "due": "2026-04-23", "priority": "High", "owner": "Reliability" },
+    { "unit": "DR-006", "type": "Bit Replacement", "due": "2026-04-24", "priority": "Medium", "owner": "Drill Team" },
+    { "unit": "DT-188", "type": "500h Service", "due": "2026-04-28", "priority": "Medium", "owner": "Workshop B" }
+  ],
+  "notifications": [
+    "Shift B handover ready",
+    "Fuel reconciliation completed",
+    "Weather advisory updated"
+  ]
+}
