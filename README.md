@@ -26,8 +26,10 @@ The test script runs syntax linting, format checks, unit tests, then starts a te
 - Production monitoring
 - Safety monitoring
 - Maintenance schedule
+- Reports
+- Settings
 - Notification dropdown
-- Simple role-based navigation visibility
+- Role selector with consistent core navigation
 - Mock JSON API at `/api/mock-data`
 
 The implementation is intentionally dependency-free so it can run consistently in this workspace without downloading packages.

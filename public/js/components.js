@@ -26,6 +26,17 @@ export function formatNumber(value) {
   return new Intl.NumberFormat("en-US").format(value);
 }
 
+export function matchesQuery(item, query) {
+  const normalizedQuery = query.trim().toLowerCase();
+  if (!normalizedQuery) return true;
+  return Object.values(item).some((value) => String(value).toLowerCase().includes(normalizedQuery));
+}
+
+export function resultCountLabel(count, total, query) {
+  if (!query.trim()) return `${total} records`;
+  return `${count} of ${total} results`;
+}
+
 export function pageTitle(title, subtitle, action = "") {
   return `
     <div class="page-title">
@@ -50,6 +61,10 @@ export function metricCard(item) {
 }
 
 export function table(headers, rows) {
+  if (!rows.length) {
+    return `<div class="empty-state">No records match the current search.</div>`;
+  }
+
   return `
     <div class="table-wrap">
       <table>

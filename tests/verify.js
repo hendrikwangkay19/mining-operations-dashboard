@@ -105,8 +105,17 @@ async function verifyServerRoutes() {
     await page.locator("a[data-route='maintenance']").click();
     await expectVisible(page, "text=Maintenance Schedule", "maintenance page");
 
+    await page.locator("a[data-route='reports']").click();
+    await expectVisible(page, "text=Reports", "reports page");
+
+    await page.locator("a[data-route='settings']").click();
+    await expectVisible(page, "text=Settings", "settings page");
+
     await page.locator("a[data-route='dashboard']").click();
     await expectVisible(page, "text=Daily Production", "dashboard restored");
+    await page.locator("#globalSearch").fill("ROM 2");
+    await expectVisible(page, "text=1 of 4 results", "basic search filters table");
+    await page.locator("#globalSearch").fill("");
     const desktopShot = "artifacts/dashboard-desktop.png";
     await page.screenshot({ path: desktopShot, fullPage: true });
 
@@ -120,9 +129,9 @@ async function verifyServerRoutes() {
     await page.locator("select[name='role']").selectOption("Safety Officer");
     await page.locator("button[type='submit']").click();
     await expectVisible(page, "a[data-route='safety']", "safety route for safety role");
-    const productionVisible = await page.locator("a[data-route='production']").count();
-    if (productionVisible !== 0) {
-      throw new Error("Production route should be hidden for Safety Officer");
+    const coreRouteCount = await page.locator(".nav a").count();
+    if (coreRouteCount !== 7) {
+      throw new Error(`Expected 7 core navigation routes, found ${coreRouteCount}`);
     }
 
     console.log(`Verified app at ${baseUrl}`);

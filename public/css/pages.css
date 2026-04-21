@@ -68,8 +68,21 @@
 .toolbar {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 10px;
   margin-bottom: 16px;
+}
+
+.toolbar .select {
+  width: auto;
+  min-width: 180px;
+}
+
+.toolbar-meta {
+  margin-right: auto;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
 }
 
 .fleet-grid {

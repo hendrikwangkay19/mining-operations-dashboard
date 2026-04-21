@@ -1,7 +1,9 @@
-import { badge, pageTitle, table } from "../components.js";
+import { store } from "../store.js";
+import { badge, pageTitle, table, matchesQuery, resultCountLabel } from "../components.js";
 
 export function renderMaintenance(data) {
-  const rows = data.maintenance.map((item) => `
+  const maintenance = data.maintenance.filter((item) => matchesQuery(item, store.search));
+  const rows = maintenance.map((item) => `
     <tr>
       <td>${item.unit}</td>
       <td>${item.type}</td>
@@ -17,7 +19,7 @@ export function renderMaintenance(data) {
       <article class="card panel">
         <div class="panel-header">
           <h2>Maintenance Schedule</h2>
-          <span>${data.maintenance.length} planned jobs</span>
+          <span>${resultCountLabel(maintenance.length, data.maintenance.length, store.search)}</span>
         </div>
         ${table(["Unit", "Work Type", "Due Date", "Priority", "Owner"], rows)}
       </article>
@@ -27,13 +29,13 @@ export function renderMaintenance(data) {
           <span>Sorted by due date</span>
         </div>
         <div class="stack">
-          ${data.maintenance.map((item) => `
+          ${maintenance.length ? maintenance.map((item) => `
             <div class="alert-item">
               ${badge(item.priority)}
               <div class="alert-title">${item.unit} - ${item.type}</div>
               <div class="alert-meta">${item.owner} - due ${item.due}</div>
             </div>
-          `).join("")}
+          `).join("") : `<div class="empty-state">No maintenance jobs match the current search.</div>`}
         </div>
       </article>
     </section>

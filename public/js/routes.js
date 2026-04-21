@@ -12,7 +12,7 @@ export const routes = {
   production: {
     label: "Production",
     icon: "PR",
-    roles: ["Operations Lead"]
+    roles: ["Operations Lead", "Safety Officer", "Maintenance Planner"]
   },
   safety: {
     label: "Safety",
@@ -22,7 +22,17 @@ export const routes = {
   maintenance: {
     label: "Maintenance",
     icon: "MT",
-    roles: ["Operations Lead", "Maintenance Planner"]
+    roles: ["Operations Lead", "Safety Officer", "Maintenance Planner"]
+  },
+  reports: {
+    label: "Reports",
+    icon: "RP",
+    roles: ["Operations Lead", "Safety Officer", "Maintenance Planner"]
+  },
+  settings: {
+    label: "Settings",
+    icon: "ST",
+    roles: ["Operations Lead", "Safety Officer", "Maintenance Planner"]
   }
 };
 

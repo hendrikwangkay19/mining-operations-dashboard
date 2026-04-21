@@ -1,8 +1,11 @@
-import { badge, pageTitle, metricCard, table, alertList } from "../components.js";
+import { store } from "../store.js";
+import { badge, pageTitle, metricCard, table, alertList, matchesQuery, resultCountLabel } from "../components.js";
 import { renderUtilization } from "../charts.js";
 
 export function renderDashboard(data) {
-  const operationRows = data.operations.map((item) => `
+  const operations = data.operations.filter((item) => matchesQuery(item, store.search));
+  const alerts = data.alerts.filter((item) => matchesQuery(item, store.search));
+  const operationRows = operations.map((item) => `
     <tr>
       <td>${item.shift}</td>
       <td>${item.site}</td>
@@ -28,7 +31,7 @@ export function renderDashboard(data) {
         <article class="card panel">
           <div class="panel-header">
             <h2>Table Operations</h2>
-            <span>Shift execution vs plan</span>
+            <span>${resultCountLabel(operations.length, data.operations.length, store.search)}</span>
           </div>
           ${table(["Shift", "Site", "Activity", "Target", "Actual", "Status"], operationRows)}
         </article>
@@ -44,9 +47,9 @@ export function renderDashboard(data) {
         <article class="card panel">
           <div class="panel-header">
             <h2>Alert Panel</h2>
-            <span>${data.alerts.length} active alerts</span>
+            <span>${resultCountLabel(alerts.length, data.alerts.length, store.search)}</span>
           </div>
-          ${alertList(data.alerts)}
+          ${alertList(alerts)}
         </article>
       </div>
     </section>

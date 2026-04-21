@@ -9,6 +9,13 @@
   color: var(--ink);
 }
 
+.input:focus,
+.select:focus {
+  border-color: var(--brand);
+  outline: 3px solid rgba(31, 111, 91, 0.16);
+  outline-offset: 0;
+}
+
 .primary-btn {
   width: 100%;
   min-height: 44px;

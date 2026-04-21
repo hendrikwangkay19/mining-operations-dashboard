@@ -1,5 +1,5 @@
 import { store } from "../store.js";
-import { badge, formatNumber, pageTitle } from "../components.js";
+import { badge, formatNumber, pageTitle, matchesQuery, resultCountLabel } from "../components.js";
 
 export function renderFleet(data) {
   const sites = ["All", ...new Set(data.fleet.map((unit) => unit.site))];
@@ -8,7 +8,7 @@ export function renderFleet(data) {
   const units = data.fleet.filter((unit) => {
     const statusMatch = store.fleetStatus === "All" || unit.status === store.fleetStatus;
     const siteMatch = store.fleetSite === "All" || unit.site === store.fleetSite;
-    const queryMatch = !query || Object.values(unit).some((value) => String(value).toLowerCase().includes(query));
+    const queryMatch = matchesQuery(unit, query);
     return statusMatch && siteMatch && queryMatch;
   });
 
@@ -16,6 +16,7 @@ export function renderFleet(data) {
     ${pageTitle("Fleet Monitoring", "Filter by unit status or site, then open unit detail for operational context.")}
     <section class="card panel">
       <div class="toolbar">
+        <span class="toolbar-meta">${resultCountLabel(units.length, data.fleet.length, store.search)}</span>
         <select class="select" id="fleetStatus" aria-label="Filter fleet status">
           ${statuses.map((status) => `<option ${status === store.fleetStatus ? "selected" : ""}>${status}</option>`).join("")}
         </select>

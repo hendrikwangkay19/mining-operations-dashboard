@@ -1,7 +1,9 @@
-import { badge, formatNumber, pageTitle, table } from "../components.js";
+import { store } from "../store.js";
+import { badge, formatNumber, pageTitle, table, matchesQuery, resultCountLabel } from "../components.js";
 
 export function renderProduction(data) {
-  const rows = data.production.map((item) => `
+  const production = data.production.filter((item) => matchesQuery(item, store.search));
+  const rows = production.map((item) => `
     <tr>
       <td>${item.site}</td>
       <td>${item.material}</td>
@@ -21,7 +23,7 @@ export function renderProduction(data) {
           <span>Actual vs target</span>
         </div>
         <div class="stack">
-          ${data.production.map((item) => `
+          ${production.length ? production.map((item) => `
             <div class="progress-card card">
               <div class="progress-head">
                 <span>${item.site}</span>
@@ -29,7 +31,7 @@ export function renderProduction(data) {
               </div>
               <div class="progress-track"><span style="width:${Math.min(item.recovery, 110)}%"></span></div>
             </div>
-          `).join("")}
+          `).join("") : `<div class="empty-state">No production records match the current search.</div>`}
         </div>
       </article>
       <article class="card panel">
@@ -43,7 +45,7 @@ export function renderProduction(data) {
     <article class="card panel">
       <div class="panel-header">
         <h2>Production Table</h2>
-        <span>Daily reconciliation</span>
+          <span>${resultCountLabel(production.length, data.production.length, store.search)}</span>
       </div>
       ${table(["Site", "Material", "Target", "Actual", "Quality", "Status"], rows)}
     </article>

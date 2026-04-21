@@ -56,6 +56,11 @@
     grid-template-columns: 1fr;
   }
 
+  .toolbar .select,
+  .toolbar-meta {
+    width: 100%;
+  }
+
   .page-title {
     align-items: flex-start;
     flex-direction: column;

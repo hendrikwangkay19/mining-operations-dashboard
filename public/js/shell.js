@@ -9,13 +9,17 @@ import { renderFleet } from "./pages/fleet.js";
 import { renderProduction } from "./pages/production.js";
 import { renderSafety } from "./pages/safety.js";
 import { renderMaintenance } from "./pages/maintenance.js";
+import { renderReports } from "./pages/reports.js";
+import { renderSettings } from "./pages/settings.js";
 
 const pageRenderers = {
   dashboard: renderDashboard,
   fleet: renderFleet,
   production: renderProduction,
   safety: renderSafety,
-  maintenance: renderMaintenance
+  maintenance: renderMaintenance,
+  reports: renderReports,
+  settings: renderSettings
 };
 
 let rootElement;
@@ -43,7 +47,7 @@ function renderShell() {
         <nav class="nav">${renderNav(visibleRoutes)}</nav>
       </aside>
       <header class="topbar">
-        <input class="input search" id="globalSearch" placeholder="Search units, sites, incidents..." value="${store.search}">
+        <input class="input search" id="globalSearch" placeholder="Search units, sites, alerts..." value="${store.search}" aria-label="Search dashboard data">
         <div class="top-actions">
           <div class="notification-wrap">
             <button class="icon-btn" id="notificationBtn" title="Notifications" aria-expanded="${store.notificationsOpen}">N</button>
