@@ -1,53 +1,70 @@
 import { store } from "../store.js";
 import { badge, formatNumber, pageTitle, table, matchesQuery, resultCountLabel } from "../components.js";
 
+function recoveryClass(r) {
+  if (r >= 100) return "fill-success";
+  if (r >= 96)  return "fill-warning";
+  return "fill-danger";
+}
+
+function recoveryStatus(r) {
+  if (r >= 100) return "On Track";
+  if (r >= 96)  return "Watch";
+  return "Delayed";
+}
+
 export function renderProduction(data) {
   const production = data.production.filter((item) => matchesQuery(item, store.search));
+
   const rows = production.map((item) => `
     <tr>
-      <td>${item.site}</td>
+      <td><strong>${item.site}</strong></td>
       <td>${item.material}</td>
       <td>${formatNumber(item.target)}</td>
       <td>${formatNumber(item.actual)}</td>
-      <td>${item.quality}</td>
-      <td>${badge(item.recovery >= 100 ? "On Track" : item.recovery >= 96 ? "Watch" : "Delayed")}</td>
+      <td>${item.quality !== "N/A" ? item.quality : "<span style='color:var(--muted)'>—</span>"}</td>
+      <td><span style="font-weight:700;color:${item.recovery >= 100 ? "var(--brand)" : item.recovery >= 96 ? "var(--amber)" : "var(--red)"}">${item.recovery}%</span></td>
+      <td>${badge(recoveryStatus(item.recovery))}</td>
     </tr>
   `);
 
   return `
-    ${pageTitle("Production Monitoring", "Targets, actuals, and recovery rate for active production areas.")}
-    <section class="split-grid">
+    ${pageTitle("Production Monitoring", "Targets, actuals, and recovery rate for all active production areas.")}
+    <section class="split-grid" style="margin-bottom:18px">
       <article class="card panel">
         <div class="panel-header">
-          <h2>Production Achievement</h2>
-          <span>Actual vs target</span>
+          <h2>Achievement vs Target</h2>
+          <span>${resultCountLabel(production.length, data.production.length, store.search)}</span>
         </div>
         <div class="stack">
           ${production.length ? production.map((item) => `
-            <div class="progress-card card">
+            <div class="card progress-card">
               <div class="progress-head">
-                <span>${item.site}</span>
-                <span>${item.recovery}%</span>
+                <span class="progress-label">${item.site}</span>
+                <span class="progress-pct" style="color:${item.recovery >= 100 ? "var(--brand)" : item.recovery >= 96 ? "var(--amber)" : "var(--red)"}">${item.recovery}%</span>
               </div>
-              <div class="progress-track"><span style="width:${Math.min(item.recovery, 110)}%"></span></div>
+              <div class="progress-sub">${item.material} &mdash; ${formatNumber(item.actual)} of ${formatNumber(item.target)}</div>
+              <div class="progress-track">
+                <div class="progress-fill ${recoveryClass(item.recovery)}" style="width:${Math.min(item.recovery, 110)}%"></div>
+              </div>
             </div>
-          `).join("") : `<div class="empty-state">No production records match the current search.</div>`}
+          `).join("") : `<div class="empty-state">No records match current search.</div>`}
         </div>
       </article>
       <article class="card panel">
         <div class="panel-header">
           <h2>Weekly Trend</h2>
-          <span>Coal and overburden</span>
+          <span>Overburden &amp; Coal (7 days)</span>
         </div>
-        <canvas class="chart" id="productionChart" width="900" height="280"></canvas>
+        <canvas class="chart" id="productionChart"></canvas>
       </article>
     </section>
     <article class="card panel">
       <div class="panel-header">
         <h2>Production Table</h2>
-          <span>${resultCountLabel(production.length, data.production.length, store.search)}</span>
+        <span>${resultCountLabel(production.length, data.production.length, store.search)}</span>
       </div>
-      ${table(["Site", "Material", "Target", "Actual", "Quality", "Status"], rows)}
+      ${table(["Site", "Material", "Target", "Actual", "Quality", "Recovery", "Status"], rows)}
     </article>
   `;
 }

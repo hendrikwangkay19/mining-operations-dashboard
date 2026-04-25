@@ -1,16 +1,130 @@
 :root {
-  --bg: #f4f6f2;
-  --panel: #ffffff;
-  --panel-strong: #eef3ec;
-  --ink: #18221c;
-  --muted: #667064;
-  --line: #dce3d8;
-  --brand: #1f6f5b;
-  --brand-strong: #104c3d;
-  --amber: #c77718;
-  --red: #b4403b;
-  --blue: #315d92;
-  --shadow: 0 14px 32px rgba(31, 45, 36, 0.1);
-  --radius: 8px;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  /* === Brand — Forest Green === */
+  --brand-50:  #edf7f2;
+  --brand-100: #c8e9da;
+  --brand-200: #9dd4c2;
+  --brand-300: #6bbda8;
+  --brand-400: #3da68e;
+  --brand-500: #1f6f5b;
+  --brand-600: #185c4a;
+  --brand-700: #104c3d;
+  --brand-800: #083a2d;
+  --brand-900: #03271e;
+
+  /* === Amber — Warning === */
+  --amber-50:  #fdf6e8;
+  --amber-100: #fbe5bb;
+  --amber-200: #f8d08b;
+  --amber-400: #e59d2c;
+  --amber-500: #c77718;
+  --amber-600: #a45f0f;
+  --amber-700: #7c4608;
+
+  /* === Red — Danger === */
+  --red-50:  #fdf0f0;
+  --red-100: #f9cfcf;
+  --red-200: #f4a6a3;
+  --red-500: #b4403b;
+  --red-600: #8e2823;
+
+  /* === Blue — Info === */
+  --blue-50:  #e8eef8;
+  --blue-100: #c3d3ed;
+  --blue-200: #95b5e4;
+  --blue-500: #315d92;
+  --blue-600: #244879;
+  --blue-700: #193560;
+
+  /* === Neutral === */
+  --neutral-0:   #ffffff;
+  --neutral-50:  #f4f6f2;
+  --neutral-100: #eef3ec;
+  --neutral-200: #dce3d8;
+  --neutral-300: #c4cec0;
+  --neutral-400: #9aac95;
+  --neutral-500: #667064;
+  --neutral-600: #4d5c4a;
+  --neutral-700: #354832;
+  --neutral-800: #1e3019;
+
+  /* === Semantic Tokens === */
+  --brand:        var(--brand-500);
+  --brand-strong: var(--brand-700);
+  --amber:        var(--amber-500);
+  --red:          var(--red-500);
+  --blue:         var(--blue-500);
+
+  --bg:           #eff2ed;
+  --panel:        var(--neutral-0);
+  --panel-strong: var(--neutral-100);
+  --ink:          #18221c;
+  --muted:        var(--neutral-500);
+  --subtle:       var(--neutral-400);
+  --line:         var(--neutral-200);
+
+  /* Status badges */
+  --status-success-bg:   #dff0e8;
+  --status-success-text: var(--brand-700);
+  --status-warning-bg:   #fdf0d5;
+  --status-warning-text: var(--amber-700);
+  --status-danger-bg:    #fde9e9;
+  --status-danger-text:  var(--red-600);
+  --status-info-bg:      #e2ecf8;
+  --status-info-text:    var(--blue-700);
+  --status-neutral-bg:   var(--neutral-100);
+  --status-neutral-text: var(--neutral-600);
+
+  /* === Sidebar === */
+  --sidebar-bg:              #0c1e12;
+  --sidebar-hover:           rgba(255,255,255,0.07);
+  --sidebar-active:          rgba(255,255,255,0.13);
+  --sidebar-indicator:       var(--brand-400);
+  --sidebar-text:            rgba(255,255,255,0.62);
+  --sidebar-text-active:     #ffffff;
+  --sidebar-text-muted:      rgba(255,255,255,0.32);
+  --sidebar-width:           232px;
+  --sidebar-collapsed-width: 60px;
+
+  /* === Topbar === */
+  --topbar-height: 56px;
+
+  /* === Spacing (8px grid) === */
+  --sp-1:  4px;  --sp-2:  8px;  --sp-3:  12px; --sp-4:  16px;
+  --sp-5:  20px; --sp-6:  24px; --sp-8:  32px;
+  --sp-10: 40px; --sp-12: 48px;
+
+  /* === Typography === */
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+
+  --text-2xs: 10px; --text-xs: 11px; --text-sm: 12px;
+  --text-base: 13px; --text-md: 14px; --text-lg: 16px;
+  --text-xl: 20px; --text-2xl: 24px; --text-3xl: 32px; --text-4xl: 40px;
+
+  /* === Border Radius === */
+  --radius-sm:  4px;  --radius:    8px;
+  --radius-md:  10px; --radius-lg: 12px;
+  --radius-xl:  16px; --radius-full: 9999px;
+
+  /* === Shadows === */
+  --shadow-xs: 0 1px 2px rgba(8,20,12,0.04);
+  --shadow-sm: 0 1px 3px rgba(8,20,12,0.07), 0 1px 2px rgba(8,20,12,0.04);
+  --shadow:    0 2px 8px rgba(8,20,12,0.08), 0 1px 3px rgba(8,20,12,0.05);
+  --shadow-md: 0 4px 16px rgba(8,20,12,0.10), 0 2px 4px rgba(8,20,12,0.06);
+  --shadow-lg: 0 10px 28px rgba(8,20,12,0.14), 0 3px 8px rgba(8,20,12,0.08);
+  --shadow-xl: 0 20px 48px rgba(8,20,12,0.18), 0 6px 16px rgba(8,20,12,0.10);
+
+  /* === Motion === */
+  --ease:     cubic-bezier(0.4,0,0.2,1);
+  --ease-out: cubic-bezier(0.0,0,0.2,1);
+  --dur-xs: 80ms; --dur-sm: 150ms; --dur-md: 220ms; --dur-lg: 320ms;
+
+  /* === Z-index === */
+  --z-raised:  10; --z-overlay: 20; --z-sticky: 30;
+  --z-fixed:   40; --z-modal:   50; --z-toast:  60;
+
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }

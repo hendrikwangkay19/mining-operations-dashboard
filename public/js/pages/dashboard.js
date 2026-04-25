@@ -1,14 +1,15 @@
 import { store } from "../store.js";
 import { badge, pageTitle, metricCard, table, alertList, matchesQuery, resultCountLabel } from "../components.js";
-import { renderUtilization } from "../charts.js";
+import { renderUtilization, renderFleetDonut } from "../charts.js";
 
 export function renderDashboard(data) {
-  const operations = data.operations.filter((item) => matchesQuery(item, store.search));
+  const ops    = data.operations.filter((item) => matchesQuery(item, store.search));
   const alerts = data.alerts.filter((item) => matchesQuery(item, store.search));
-  const operationRows = operations.map((item) => `
+
+  const opRows = ops.map((item) => `
     <tr>
-      <td>${item.shift}</td>
-      <td>${item.site}</td>
+      <td><span class="status status-neutral" style="font-family:monospace">Shift ${item.shift}</span></td>
+      <td><strong>${item.site}</strong></td>
       <td>${item.activity}</td>
       <td>${item.target}</td>
       <td>${item.actual}</td>
@@ -17,36 +18,43 @@ export function renderDashboard(data) {
   `);
 
   return `
-    ${pageTitle("Dashboard", "Real-time operating snapshot for production, utilization, hauling, safety, and maintenance.")}
+    ${pageTitle("Operations Dashboard", "Real-time snapshot for production, fleet, safety, and maintenance.")}
     <section class="summary-grid">${data.summary.map(metricCard).join("")}</section>
     <section class="content-grid">
       <div>
         <article class="card panel">
           <div class="panel-header">
             <h2>Production Trend</h2>
-            <span>Overburden and coal, last 7 days</span>
+            <span>Overburden &amp; Coal — last 7 days</span>
           </div>
-          <canvas class="chart" id="productionChart" width="900" height="280"></canvas>
+          <canvas class="chart" id="productionChart"></canvas>
         </article>
         <article class="card panel">
           <div class="panel-header">
-            <h2>Table Operations</h2>
-            <span>${resultCountLabel(operations.length, data.operations.length, store.search)}</span>
+            <h2>Operations Log</h2>
+            <span>${resultCountLabel(ops.length, data.operations.length, store.search)}</span>
           </div>
-          ${table(["Shift", "Site", "Activity", "Target", "Actual", "Status"], operationRows)}
+          ${table(["Shift", "Site", "Activity", "Target", "Actual", "Status"], opRows)}
         </article>
       </div>
       <div>
         <article class="card panel">
           <div class="panel-header">
-            <h2>Fleet Utilization</h2>
-            <span>Equipment class</span>
+            <h2>Fleet Status</h2>
+            <span>${data.fleet.length} units total</span>
+          </div>
+          ${renderFleetDonut(data.fleet)}
+        </article>
+        <article class="card panel">
+          <div class="panel-header">
+            <h2>Equipment Utilization</h2>
+            <span>By class</span>
           </div>
           ${renderUtilization(data.utilization)}
         </article>
         <article class="card panel">
           <div class="panel-header">
-            <h2>Alert Panel</h2>
+            <h2>Active Alerts</h2>
             <span>${resultCountLabel(alerts.length, data.alerts.length, store.search)}</span>
           </div>
           ${alertList(alerts)}
