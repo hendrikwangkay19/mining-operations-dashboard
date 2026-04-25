@@ -4,24 +4,36 @@ import { requireAuth } from '../middleware/auth.js';
 
 const router = Router();
 
-router.get('/', requireAuth, (req, res, next) => {
+router.get('/', requireAuth, async (req, res, next) => {
   try {
-    const fleet       = db.prepare('SELECT * FROM fleet_units ORDER BY id').all();
-    const production  = db.prepare("SELECT * FROM production_records WHERE recorded_date = date('now') ORDER BY id").all();
-    const trend       = db.prepare('SELECT * FROM production_trend ORDER BY id').all();
-    const utilization = db.prepare('SELECT equipment_type AS name, utilization_pct AS value FROM fleet_utilization ORDER BY id').all();
-    const safety      = db.prepare("SELECT * FROM safety_indicators WHERE recorded_date = date('now') ORDER BY id").all();
-    const alerts      = db.prepare("SELECT * FROM alerts WHERE is_active = 1 ORDER BY level DESC, id").all();
-    const maintenance = db.prepare("SELECT * FROM maintenance_orders WHERE status != 'Completed' ORDER BY due_date").all();
-    const operations  = db.prepare("SELECT * FROM shift_operations WHERE recorded_date = date('now') ORDER BY id").all();
-    const notifs      = db.prepare('SELECT message FROM notifications WHERE is_read = 0 ORDER BY created_at DESC LIMIT 10').all();
+    const [
+      { rows: fleet },
+      { rows: production },
+      { rows: trend },
+      { rows: utilization },
+      { rows: safety },
+      { rows: alerts },
+      { rows: maintenance },
+      { rows: operations },
+      { rows: notifs },
+    ] = await Promise.all([
+      db.query('SELECT * FROM fleet_units ORDER BY id'),
+      db.query('SELECT * FROM production_records WHERE recorded_date = CURRENT_DATE ORDER BY id'),
+      db.query('SELECT * FROM production_trend ORDER BY id'),
+      db.query('SELECT equipment_type AS name, utilization_pct AS value FROM fleet_utilization ORDER BY id'),
+      db.query('SELECT * FROM safety_indicators WHERE recorded_date = CURRENT_DATE ORDER BY id'),
+      db.query("SELECT * FROM alerts WHERE is_active = 1 ORDER BY level DESC, id"),
+      db.query("SELECT * FROM maintenance_orders WHERE status != 'Completed' ORDER BY due_date"),
+      db.query('SELECT * FROM shift_operations WHERE recorded_date = CURRENT_DATE ORDER BY id'),
+      db.query('SELECT message FROM notifications WHERE is_read = 0 ORDER BY created_at DESC LIMIT 10'),
+    ]);
 
     /* KPI summary */
-    const totalActual    = production.reduce((s, r) => s + r.actual, 0);
-    const activeUnits    = fleet.filter((u) => u.status === 'Active').length;
-    const availability   = fleet.length ? ((activeUnits / fleet.length) * 100).toFixed(1) : 0;
-    const highAlerts     = alerts.filter((a) => a.level === 'High').length;
-    const urgentMaint    = maintenance.filter((m) => m.priority === 'Urgent' || m.priority === 'High').length;
+    const totalActual  = production.reduce((s, r) => s + r.actual, 0);
+    const activeUnits  = fleet.filter((u) => u.status === 'Active').length;
+    const availability = fleet.length ? ((activeUnits / fleet.length) * 100).toFixed(1) : 0;
+    const highAlerts   = alerts.filter((a) => a.level === 'High').length;
+    const urgentMaint  = maintenance.filter((m) => m.priority === 'Urgent' || m.priority === 'High').length;
 
     const summary = [
       { label: 'Daily Production',  value: `${totalActual.toLocaleString()} t`, delta: '+8.4%',      tone: 'positive' },

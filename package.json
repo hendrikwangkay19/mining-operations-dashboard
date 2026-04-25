@@ -1,23 +1,22 @@
 {
   "name": "mining-operations-dashboard",
-  "version": "0.2.0",
-  "description": "Mining Operations Dashboard — real-time operational intelligence with SQLite backend",
+  "version": "0.3.0",
+  "description": "Mining Operations Dashboard — real-time operational intelligence platform",
   "type": "module",
   "main": "server.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
-    "start":        "node --no-warnings server.js",
-    "dev":          "node --no-warnings server.js",
-    "seed":         "node --no-warnings server/db/seed.js",
-    "test":         "node tests/lint.js && node tests/format-check.js && node tests/unit.js",
-    "lint":         "node tests/lint.js",
-    "format:check": "node tests/format-check.js",
-    "unit":         "node tests/unit.js",
-    "verify":       "node tests/verify.js"
+    "start": "node server.js",
+    "dev":   "node server.js",
+    "seed":  "node server/db/seed.js"
   },
   "dependencies": {
     "bcryptjs":     "^2.4.3",
     "dotenv":       "^16.4.5",
     "express":      "^4.19.2",
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.2",
+    "pg":           "^8.12.0"
   }
 }

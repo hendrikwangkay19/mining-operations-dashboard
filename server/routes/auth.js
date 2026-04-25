@@ -6,14 +6,15 @@ import { requireAuth } from '../middleware/auth.js';
 
 const router = Router();
 
-router.post('/login', (req, res, next) => {
+router.post('/login', async (req, res, next) => {
   try {
     const { username, password } = req.body;
     if (!username || !password) {
       return res.status(400).json({ error: 'Username and password are required' });
     }
 
-    const user = db.prepare('SELECT * FROM users WHERE username = ?').get(username);
+    const { rows } = await db.query('SELECT * FROM users WHERE username = $1', [username]);
+    const user = rows[0];
     if (!user || !bcrypt.compareSync(password, user.password_hash)) {
       return res.status(401).json({ error: 'Invalid username or password' });
     }
