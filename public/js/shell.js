@@ -2,7 +2,7 @@ import { getVisibleRoutes } from "./routes.js";
 import { bindNavEvents, renderNav } from "./nav.js";
 import { bindNotificationToggle, renderNotifications } from "./notifications.js";
 import { bindFleetInteractions } from "./fleet-interactions.js";
-import { store, clearUser, setSidebarCollapsed } from "./store.js";
+import { store, clearUser, clearToken, setSidebarCollapsed } from "./store.js";
 import { drawProductionChart } from "./charts.js";
 import { renderDashboard } from "./pages/dashboard.js";
 import { renderFleet } from "./pages/fleet.js";
@@ -88,6 +88,7 @@ function bindShellEvents(visibleRoutes) {
   /* Logout */
   document.querySelector("#logoutBtn").addEventListener("click", () => {
     clearUser();
+    clearToken();
     loginRender();
   });
 

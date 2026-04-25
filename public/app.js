@@ -1,5 +1,5 @@
 import { routes, normalizeRoute } from "./js/routes.js";
-import { store, setUser, loadMockData } from "./js/store.js";
+import { store, setUser, clearUser, setToken, clearToken, getToken, loadDashboardData } from "./js/store.js";
 import { bindRouteSync } from "./js/nav.js";
 import { mountShell } from "./js/shell.js";
 import { showToast } from "./js/components.js";
@@ -9,7 +9,7 @@ window._showToast = showToast;
 
 const app = document.querySelector("#app");
 
-function renderLogin() {
+function renderLogin(errorMsg = "") {
   const hexagonIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 22 8 22 16 12 22 2 16 2 8"/><line x1="12" y1="2" x2="12" y2="22"/><line x1="2" y1="8" x2="22" y2="8"/><line x1="2" y1="16" x2="22" y2="16"/></svg>`;
   const arrowIcon   = `<svg viewBox="0 0 20 20" fill="currentColor" class="btn-icon"><path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd"/></svg>`;
 
@@ -38,24 +38,17 @@ function renderLogin() {
             <h2>Sign in</h2>
             <p class="login-form-desc">Enter your credentials to access the operations dashboard.</p>
           </div>
+          ${errorMsg ? `<div class="login-error" role="alert">${errorMsg}</div>` : ""}
           <div class="form-group">
             <label class="form-label" for="username">Username</label>
-            <input class="input" id="username" name="username" value="ops.supervisor" autocomplete="username" placeholder="Enter username">
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="role">Role</label>
-            <select class="select" id="role" name="role">
-              <option>Operations Lead</option>
-              <option>Safety Officer</option>
-              <option>Maintenance Planner</option>
-            </select>
+            <input class="input" id="username" name="username" autocomplete="username" placeholder="e.g. ops.supervisor" required>
           </div>
           <div class="form-group">
             <label class="form-label" for="password">
               Password
               <a class="form-label-link" href="#" tabindex="-1">Forgot password?</a>
             </label>
-            <input class="input" id="password" name="password" type="password" value="mining123" autocomplete="current-password" placeholder="Enter password">
+            <input class="input" id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter password" required>
           </div>
           <button class="primary-btn" type="submit" id="loginBtn">
             <span>Sign in to Dashboard</span>
@@ -72,9 +65,31 @@ function renderLogin() {
     const btn  = document.querySelector("#loginBtn");
     btn.disabled = true;
     btn.innerHTML = `<span class="spinner"></span> Authenticating…`;
+
     const form = new FormData(e.currentTarget);
-    setUser({ name: form.get("username") || "operator", role: form.get("role") || "Operations Lead" });
-    await fetchData();
+    const username = form.get("username")?.trim();
+    const password = form.get("password");
+
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const body = await res.json();
+
+      if (!res.ok) {
+        renderLogin(body.error || "Invalid username or password.");
+        return;
+      }
+
+      setToken(body.token);
+      setUser(body.user);
+      await fetchData();
+    } catch {
+      renderLogin("Connection error. Please try again.");
+    }
   });
 }
 
@@ -117,11 +132,11 @@ function renderSkeleton() {
 async function fetchData() {
   renderSkeleton();
   try {
-    await loadMockData();
+    await loadDashboardData();
     const hashRoute = location.hash.replace("#/", "");
     store.route = normalizeRoute(routes[hashRoute] ? hashRoute : "dashboard", store.user.role);
     mountShell(app, renderLogin);
-    showToast(`Welcome, ${store.user.name}`, "success");
+    showToast(`Welcome back, ${store.user.name || store.user.username}`, "success");
   } catch {
     renderError();
   }
@@ -143,10 +158,19 @@ function renderError() {
   document.querySelector("#retryBtn").addEventListener("click", fetchData);
 }
 
+/* Handle logout from shell */
+window._logout = function () {
+  clearUser();
+  clearToken();
+  renderLogin();
+};
+
 bindRouteSync(() => mountShell(app, renderLogin));
 
-if (store.user) {
+if (store.user && getToken()) {
   fetchData();
 } else {
+  clearUser();
+  clearToken();
   renderLogin();
 }

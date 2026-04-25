@@ -2,3 +2,7 @@ server.log
 server.err.log
 artifacts/
 node_modules/
+.env
+minedesk.db
+minedesk.db-shm
+minedesk.db-wal
