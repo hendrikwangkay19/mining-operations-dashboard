@@ -6,9 +6,15 @@ import { dirname, join } from 'path';
 const { Pool } = pg;
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
+// SSL only when DATABASE_URL explicitly contains sslmode=require (e.g. Neon, RDS)
+// Railway internal networking (*.railway.internal) does not use SSL
+const sslConfig = process.env.DATABASE_URL?.includes('sslmode=require')
+  ? { rejectUnauthorized: false }
+  : false;
+
 const db = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+  ssl: sslConfig,
 });
 
 export async function initDb() {
