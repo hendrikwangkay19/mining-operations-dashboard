@@ -16,6 +16,9 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+/* ── Health check ── */
+app.get("/healthz", (req, res) => res.json({ ok: true }));
+
 /* ── API routes ── */
 app.use('/api/auth',        authRoutes);
 app.use('/api/dashboard',   dashboardRoutes);
